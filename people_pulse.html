@@ -1,1 +1,868 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>People Pulse | Workforce Risk & Staffing Visibility</title>
+  <meta
+    name="description"
+    content="People Pulse helps HR teams, operations leads, and department managers spot burnout risk, workload pressure, and hiring gaps before they become costly."
+  />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1b2e;
+      --panel: rgba(14, 25, 44, 0.82);
+      --panel-strong: #0f1e35;
+      --text: #f4f7fb;
+      --muted: #a5b4c7;
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --success: #86efac;
+      --warning: #fbbf24;
+      --danger: #fca5a5;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behaviour: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(125, 211, 252, 0.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(167, 139, 250, 0.16), transparent 28%),
+        linear-gradient(180deg, #07111f 0%, #091528 40%, #07111f 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 17, 31, 0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: centre;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: centre;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: centre;
+      background: linear-gradient(135deg, rgba(125,211,252,0.24), rgba(167,139,250,0.24));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: centre;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: centre;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: centre;
+      justify-content: centre;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      border-color: rgba(255,255,255,0.12);
+      color: var(--text);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #06111d;
+      box-shadow: 0 12px 30px rgba(125, 211, 252, 0.18);
+    }
+
+    .hero {
+      padding: 72px 0 44px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: centre;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: centre;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(134,239,172,0.12);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      margin: 0 0 18px;
+      max-width: 13ch;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 60ch;
+      margin: 0 0 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .proof-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .hero-card,
+    .card,
+    .story,
+    .feature-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(125,211,252,0.24), transparent 65%);
+      pointer-events: none;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .metric {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .metric-note {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .list-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .list-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-danger {
+      background: rgba(252, 165, 165, 0.14);
+      color: #fecaca;
+      border: 1px solid rgba(252,165,165,0.25);
+    }
+
+    .badge-warning {
+      background: rgba(251, 191, 36, 0.12);
+      color: #fde68a;
+      border: 1px solid rgba(251,191,36,0.24);
+    }
+
+    .badge-success {
+      background: rgba(134, 239, 172, 0.12);
+      color: #bbf7d0;
+      border: 1px solid rgba(134,239,172,0.22);
+    }
+
+    .section {
+      padding: 38px 0;
+    }
+
+    .section-heading {
+      max-width: 760px;
+      margin-bottom: 26px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 0 0 12px;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .audience-grid,
+    .outcome-grid,
+    .feature-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card,
+    .feature-card {
+      padding: 22px;
+    }
+
+    .card h3,
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+    }
+
+    .card p,
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: centre;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 1.2rem;
+    }
+
+    .story {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+      padding: 28px;
+      align-items: centre;
+    }
+
+    .story-copy .story-tag {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(125,211,252,0.12);
+      border: 1px solid rgba(125,211,252,0.18);
+      color: #bae6fd;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .story h3 {
+      font-size: 1.7rem;
+      line-height: 1.15;
+      margin: 0 0 12px;
+      letter-spacing: -0.03em;
+    }
+
+    .story p {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .story-points {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .story-points li {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .story-panel {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .story-panel-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: centre;
+      margin-bottom: 16px;
+    }
+
+    .story-panel-title {
+      font-weight: 700;
+    }
+
+    .story-score {
+      display: inline-flex;
+      align-items: centre;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(252,165,165,0.1);
+      border: 1px solid rgba(252,165,165,0.18);
+      color: #fecaca;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .bar-group {
+      margin-bottom: 14px;
+    }
+
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .story-callout {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(134,239,172,0.08);
+      border: 1px solid rgba(134,239,172,0.18);
+      color: #d1fae5;
+      font-size: 0.96rem;
+    }
+
+    .cta {
+      padding: 32px;
+      text-align: centre;
+      background: linear-gradient(180deg, rgba(125,211,252,0.08), rgba(167,139,250,0.08));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .cta h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .cta p {
+      max-width: 700px;
+      margin: 0 auto 22px;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .footer {
+      padding: 26px 0 42px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .story,
+      .audience-grid,
+      .outcome-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 48px;
+      }
+
+      h1 {
+        max-width: unset;
+      }
+
+      .cta,
+      .hero-card,
+      .card,
+      .feature-card,
+      .story {
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="brand" aria-label="People Pulse home">
+        <span class="brand-mark">◎</span>
+        <span>People Pulse</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#who">Who it’s for</a>
+        <a href="#outcomes">Outcomes</a>
+        <a href="#story">Demo story</a>
+        <a href="#platform">Platform</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-ghost" href="/login">Internal login</a>
+        <a class="btn btn-primary" href="#story">View demo story</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Workforce visibility for growing teams
+          </div>
+
+          <h1>Predict burnout risk, workload pressure, and hiring gaps before they become costly</h1>
+
+          <p>
+            People Pulse turns HR data, workload signals, and department-level visibility into a clear operating view of team health.
+            Spot where capacity is stretched, flag early risk, and help managers act before attrition, absenteeism, and delivery delays escalate.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#outcomes">See outcomes</a>
+            <a class="btn btn-ghost" href="/login">Go to internal app</a>
+          </div>
+
+          <div class="hero-proof">
+            <span class="proof-pill">Burnout-risk indicators</span>
+            <span class="proof-pill">Workload pressure visibility</span>
+            <span class="proof-pill">Staffing and hiring insight</span>
+          </div>
+        </div>
+
+        <div class="hero-card" aria-label="Illustrative product dashboard">
+          <div class="metric-row">
+            <div class="metric">
+              <div class="metric-label">Burnout risk</div>
+              <div class="metric-value">12 flagged</div>
+              <div class="metric-note">Early intervention candidates</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Workload pressure</div>
+              <div class="metric-value">3 teams</div>
+              <div class="metric-note">Above sustainable range</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Hiring gaps</div>
+              <div class="metric-value">5 roles</div>
+              <div class="metric-note">Impacting delivery capacity</div>
+            </div>
+          </div>
+
+          <h3 class="panel-title">Manager scorecard</h3>
+          <div class="list">
+            <div class="list-item">
+              <div>
+                <strong>Marketing</strong>
+                <span>Capacity exceeds target range for current headcount</span>
+              </div>
+              <span class="badge badge-danger">Over capacity</span>
+            </div>
+
+            <div class="list-item">
+              <div>
+                <strong>Customer Success</strong>
+                <span>Absence trend stable, utilisation within target</span>
+              </div>
+              <span class="badge badge-success">Healthy</span>
+            </div>
+
+            <div class="list-item">
+              <div>
+                <strong>Operations</strong>
+                <span>Open roles creating workload pressure across leads</span>
+              </div>
+              <span class="badge badge-warning">Hiring pressure</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="who">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Built for the people responsible for workforce health</h2>
+          <p>
+            People Pulse is designed for teams that need more than reporting. It gives decision-makers a practical view of pressure, risk, and staffing needs across the organisation.
+          </p>
+        </div>
+
+        <div class="audience-grid">
+          <article class="card">
+            <div class="icon">👥</div>
+            <h3>HR teams</h3>
+            <p>
+              Surface early warning signs linked to overload, absenteeism, and burnout risk so HR can intervene earlier and support retention with evidence.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon">⚙️</div>
+            <h3>Operations leads</h3>
+            <p>
+              Understand where delivery pressure is building, which teams are running hot, and where hiring gaps are affecting execution capacity.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon">📊</div>
+            <h3>Department managers</h3>
+            <p>
+              Get scorecards and team-level visibility that help managers rebalance workloads, prioritise support, and make staffing requests sooner.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="outcomes">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Concrete outcomes, not just dashboards</h2>
+          <p>
+            The goal is simple: reduce avoidable strain, improve staffing decisions, and give leaders the visibility to act before a people problem turns into a business problem.
+          </p>
+        </div>
+
+        <div class="outcome-grid">
+          <article class="feature-card">
+            <div class="icon">🛡️</div>
+            <h3>Reduced overload</h3>
+            <p>
+              Identify teams and roles carrying unsustainable pressure so work can be redistributed before burnout, delays, and disengagement compound.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="icon">⏱️</div>
+            <h3>Earlier intervention</h3>
+            <p>
+              Flag higher-risk employees and emerging stress patterns sooner, giving HR and managers time to respond while options are still available.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="icon">🧭</div>
+            <h3>Better staffing visibility</h3>
+            <p>
+              Connect hiring demand, workload pressure, and team structure into one view so leaders can plan recruitment with clearer business context.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="story">
+      <div class="container">
+        <div class="story">
+          <div class="story-copy">
+            <span class="story-tag">Demo story</span>
+            <h3>Marketing team over capacity, high-risk employees flagged, manager scorecard recommends rebalancing</h3>
+            <p>
+              A department head opens People Pulse and immediately sees the Marketing team running above sustainable capacity.
+              Two employees are flagged as high-risk based on combined workload and absence-related indicators, while a manager scorecard recommends rebalancing campaign work and reviewing headcount coverage.
+            </p>
+
+            <ul class="story-points">
+              <li><strong>Pressure detected:</strong> Workload trend spikes beyond target capacity for the team.</li>
+              <li><strong>Risk surfaced:</strong> High-risk employees are highlighted for earlier support and follow-up.</li>
+              <li><strong>Action recommended:</strong> The manager scorecard suggests redistributing work and escalating staffing need.</li>
+            </ul>
+          </div>
+
+          <div class="story-panel">
+            <div class="story-panel-header">
+              <div>
+                <div class="story-panel-title">Marketing team snapshot</div>
+                <div style="color: var(--muted); font-size: 0.92rem;">Illustrative People Pulse view</div>
+              </div>
+              <div class="story-score">High pressure</div>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-meta">
+                <span>Team capacity</span>
+                <span>128%</span>
+              </div>
+              <div class="bar"><span style="width: 92%;"></span></div>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-meta">
+                <span>Burnout-risk score</span>
+                <span>Elevated</span>
+              </div>
+              <div class="bar"><span style="width: 78%;"></span></div>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-meta">
+                <span>Staffing coverage</span>
+                <span>Under target</span>
+              </div>
+              <div class="bar"><span style="width: 58%;"></span></div>
+            </div>
+
+            <div class="story-callout">
+              Recommended next step: rebalance campaign ownership, reduce single-person bottlenecks, and review open hiring need for the team.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="platform">
+      <div class="container">
+        <div class="section-heading">
+          <h2>A SaaS-style front end for a workforce insights platform</h2>
+          <p>
+            The underlying app already points toward HR workflows, reporting, workload-related pages, and early burnout-risk indicators.
+            This public page reframes that direction as a product story, while the internal application remains accessible through its existing login flow.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="card">
+            <div class="icon">📁</div>
+            <h3>HR operations foundation</h3>
+            <p>
+              Recruitment, employee records, departments, organisation views, and reporting provide the operating context behind workforce decisions.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon">📈</div>
+            <h3>Insights that connect signals</h3>
+            <p>
+              Workload, staffing pressure, and people risk are presented together so leaders can understand not just what is happening, but where to act.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon">🔐</div>
+            <h3>Separate public pitch and internal product</h3>
+            <p>
+              The public site sells the vision. The internal login remains dedicated to authenticated app users and day-to-day operational workflows.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta">
+          <h2>Make workforce risk visible before it becomes expensive</h2>
+          <p>
+            People Pulse helps organisations move from reactive people management to earlier, clearer, and more confident intervention across teams.
+          </p>
+          <div class="hero-actions" style="justify-content: centre; margin-bottom: 0;">
+            <a class="btn btn-primary" href="/login">Open internal app</a>
+            <a class="btn btn-ghost" href="#who">Explore the product story</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2026 People Pulse</div>
+      <div>Workforce visibility · Burnout-risk insight · Staffing pressure clarity</div>
+    </div>
+  </footer>
+</body>
+</html>
